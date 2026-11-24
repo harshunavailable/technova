@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Create Account — Technova</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div id="navbar"></div>
+
+<div class="auth-wrap">
+  <div class="auth-card">
+    <h1 style="font-size:1.6rem;">Create your account</h1>
+    <p style="margin-bottom:24px;">Save builds, track orders, and check out faster.</p>
+    <form id="register-form">
+      <div class="field"><label for="fullName">Full name</label><input type="text" id="fullName" required></div>
+      <div class="field"><label for="email">Email</label><input type="email" id="email" required></div>
+      <div class="field"><label for="phone">Phone (optional)</label><input type="tel" id="phone"></div>
+      <div class="field"><label for="password">Password</label><input type="password" id="password" required minlength="6"></div>
+      <button type="submit" class="btn btn-primary btn-block" id="register-btn">Create account</button>
+    </form>
+    <div class="auth-switch">Already have an account? <a href="login.html">Log in</a></div>
+  </div>
+</div>
+
+<div id="footer"></div>
+
+<script src="js/components.js"></script>
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => { renderNavbar(); renderFooter(); initRegisterForm(); });
+</script>
+</body>
+</html>

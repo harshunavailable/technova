@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Panel — Technova</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div id="navbar"></div>
+
+<div class="admin-shell">
+  <aside class="admin-sidebar">
+    <a href="#" data-panel="dashboard" class="admin-nav-link active">Dashboard</a>
+    <a href="#" data-panel="products" class="admin-nav-link">Products</a>
+    <a href="#" data-panel="orders" class="admin-nav-link">Orders</a>
+    <a href="#" data-panel="customers" class="admin-nav-link">Customers</a>
+    <a href="#" data-panel="inventory" class="admin-nav-link">Inventory</a>
+  </aside>
+
+  <main class="admin-main">
+    <div id="admin-gate"></div>
+
+    <section id="panel-dashboard" class="admin-panel">
+      <h1>Dashboard</h1>
+      <div class="stat-grid" id="stat-grid"></div>
+      <p style="color:var(--ink-soft);">Welcome to the Technova admin panel. Use the sidebar to manage products, orders, customers and stock levels.</p>
+    </section>
+
+    <section id="panel-products" class="admin-panel" style="display:none;">
+      <div class="admin-toolbar">
+        <h1 style="margin:0;">Products</h1>
+        <button class="btn btn-primary btn-sm" id="new-product-btn">+ Add product</button>
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="admin-table" id="products-table">
+          <thead><tr><th>Name</th><th>Category</th><th>Price</th><th>Stock</th><th>Actions</th></tr></thead>
+          <tbody><tr><td colspan="5" class="loading-row">Loading…</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="panel-orders" class="admin-panel" style="display:none;">
+      <h1>Orders</h1>
+      <div style="overflow-x:auto;">
+        <table class="admin-table" id="orders-table">
+          <thead><tr><th>Order</th><th>Customer</th><th>Date</th><th>Total</th><th>Status</th></tr></thead>
+          <tbody><tr><td colspan="5" class="loading-row">Loading…</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="panel-customers" class="admin-panel" style="display:none;">
+      <h1>Customers</h1>
+      <div style="overflow-x:auto;">
+        <table class="admin-table" id="customers-table">
+          <thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Joined</th></tr></thead>
+          <tbody><tr><td colspan="4" class="loading-row">Loading…</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="panel-inventory" class="admin-panel" style="display:none;">
+      <h1>Inventory</h1>
+      <p style="color:var(--ink-soft);">Update stock counts directly — changes save when you click out of the field.</p>
+      <div style="overflow-x:auto;">
+        <table class="admin-table" id="inventory-table">
+          <thead><tr><th>Product</th><th>Category</th><th>Stock</th></tr></thead>
+          <tbody><tr><td colspan="3" class="loading-row">Loading…</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- Add/Edit product modal -->
+<div class="picker-modal-backdrop" id="product-modal-backdrop">
+  <div class="picker-modal" style="max-width:560px;">
+    <div class="picker-head">
+      <h3>Add a product</h3>
+      <button class="btn btn-sm btn-ghost" id="product-modal-close">Close</button>
+    </div>
+    <form id="product-form" style="padding:20px 24px; overflow-y:auto;">
+      <div class="field"><label>Category</label><select id="pf-category" required></select></div>
+      <div class="field"><label>Product name</label><input type="text" id="pf-name" required></div>
+      <div class="field"><label>Brand</label><input type="text" id="pf-brand"></div>
+      <div class="field"><label>Description</label><textarea id="pf-description" rows="3"></textarea></div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+        <div class="field"><label>Price (₹)</label><input type="number" id="pf-price" required min="0" step="0.01"></div>
+        <div class="field"><label>Stock</label><input type="number" id="pf-stock" required min="0"></div>
+      </div>
+      <button type="submit" class="btn btn-primary btn-block">Save product</button>
+    </form>
+  </div>
+</div>
+
+<div id="footer"></div>
+
+<script src="js/components.js"></script>
+<script src="js/api.js"></script>
+<script src="js/admin.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => { renderNavbar(); renderFooter(); initAdmin(); });
+</script>
+</body>
+</html>

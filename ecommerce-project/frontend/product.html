@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product — Technova</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div id="navbar"></div>
+
+<section class="section-tight">
+  <div class="container">
+    <div class="breadcrumb" id="breadcrumb"><a href="index.html">Home</a> / <span id="crumb-cat">Products</span></div>
+    <div id="pd-content"><div class="loading-row">Loading product…</div></div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <h2>You might also like</h2>
+    <div class="product-grid" id="related-grid"></div>
+  </div>
+</section>
+
+<div id="footer"></div>
+
+<script src="js/components.js"></script>
+<script src="js/api.js"></script>
+<script src="js/products.js"></script>
+<script>
+const productId = new URLSearchParams(location.search).get('id');
+
+document.addEventListener('DOMContentLoaded', async () => {
+  renderNavbar();
+  renderFooter();
+  if (!productId) { document.getElementById('pd-content').innerHTML = `<div class="empty-state"><h3>No product selected</h3></div>`; return; }
+
+  try {
+    const p = await api.get(`/products/${productId}`);
+    document.getElementById('crumb-cat').innerHTML = `<a href="products.html?section=${p.SectionType}">${p.CategoryName}</a> / ${p.Name}`;
+    renderProduct(p);
+    loadFeatured('related-grid', p.SectionType, 4);
+  } catch (err) {
+    document.getElementById('pd-content').innerHTML = `<div class="empty-state"><h3>Product not found</h3><p>${err.message}</p></div>`;
+  }
+});
+
+function renderProduct(p) {
+  const price = p.DiscountPrice || p.Price;
+  const hasDiscount = p.DiscountPrice && p.DiscountPrice < p.Price;
+  let specs = {};
+  try { specs = JSON.parse(p.SpecsJSON || '{}'); } catch (_) {}
+
+  const specRows = Object.entries(specs).map(([k, v]) => `<tr><td>${k}</td><td>${v}</td></tr>`).join('');
+
+  document.getElementById('pd-content').innerHTML = `
+    <div class="pd-layout">
+      <div class="pd-gallery"><img src="${placeholderImg(p.Name)}" alt="${p.Name}" style="width:70%;"></div>
+      <div>
+        <span class="product-cat">${p.CategoryName}</span>
+        <h1 class="pd-title">${p.Name}</h1>
+        <div class="product-rating">★ ${Number(p.Rating || 4).toFixed(1)} · ${p.Brand || 'Technova'}</div>
+        <div class="pd-price-row">
+          <span class="price-now">${formatINR(price)}</span>
+          ${hasDiscount ? `<span class="price-was">${formatINR(p.Price)}</span>` : ''}
+        </div>
+        <p>${p.Description || 'No description provided for this product yet.'}</p>
+
+        ${p.Stock > 0
+          ? `<div class="pd-qty-row">
+               <div class="qty-control">
+                 <button onclick="stepQty(-1)">−</button><span id="pd-qty">1</span><button onclick="stepQty(1)">+</button>
+               </div>
+               <span style="color:var(--ink-soft); font-size:.9rem;">${p.Stock} in stock</span>
+             </div>
+             <div style="display:flex; gap:12px; flex-wrap:wrap;">
+               <button class="btn btn-primary" onclick="addDetailToCart(${p.ProductID})">Add to cart</button>
+               <a href="pc-builder.html" class="btn btn-ghost">Use in PC Builder →</a>
+             </div>`
+          : `<p class="stock-low" style="font-size:1rem;">Currently out of stock</p>`}
+
+        ${specRows ? `<table class="spec-table"><tbody>${specRows}</tbody></table>` : ''}
+      </div>
+    </div>`;
+}
+
+function stepQty(delta) {
+  const el = document.getElementById('pd-qty');
+  const next = Math.max(1, Number(el.textContent) + delta);
+  el.textContent = next;
+}
+
+async function addDetailToCart(productId) {
+  if (!isLoggedIn()) { toast('Please log in to add items to your cart.', 'error'); setTimeout(() => location.href = 'login.html', 800); return; }
+  const qty = Number(document.getElementById('pd-qty').textContent);
+  try {
+    await api.post('/cart', { productId, quantity: qty }, true);
+    toast('Added to cart.', 'success');
+    updateCartBadge();
+  } catch (err) {
+    toast(err.message, 'error');
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Checkout — Technova</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div id="navbar"></div>
+
+<div class="container page-title-block">
+  <h1>Checkout</h1>
+  <p>Almost there — confirm your address and payment method.</p>
+</div>
+
+<section class="section-tight">
+  <div class="container checkout-grid">
+    <div>
+      <h3>Shipping address</h3>
+      <form id="checkout-form">
+        <div class="field">
+          <label for="line1">Address</label>
+          <input type="text" id="line1" required placeholder="House no., street, area">
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+          <div class="field"><label for="city">City</label><input type="text" id="city" required></div>
+          <div class="field"><label for="state">State</label><input type="text" id="state" required></div>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+          <div class="field"><label for="postal">Postal code</label><input type="text" id="postal" required></div>
+          <div class="field"><label for="country">Country</label><input type="text" id="country" value="India" required></div>
+        </div>
+
+        <h3 style="margin-top:28px;">Payment method</h3>
+        <div class="payment-options">
+          <label class="payment-option active"><input type="radio" name="payment" value="COD" checked> Cash on Delivery</label>
+          <label class="payment-option"><input type="radio" name="payment" value="Card"> Credit / Debit Card</label>
+          <label class="payment-option"><input type="radio" name="payment" value="UPI"> UPI</label>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block" id="place-order-btn">Place order</button>
+      </form>
+    </div>
+
+    <aside class="summary-card">
+      <h3>Order Summary</h3>
+      <div id="checkout-lines"></div>
+      <div class="summary-line" style="margin-top:10px;"><span>Subtotal</span><span id="co-subtotal">₹0</span></div>
+      <div class="summary-line"><span>Tax (18%)</span><span id="co-tax">₹0</span></div>
+      <div class="summary-line"><span>Shipping</span><span id="co-shipping">₹0</span></div>
+      <div class="summary-total"><span>Total</span><span id="co-total">₹0</span></div>
+    </aside>
+  </div>
+</section>
+
+<div id="footer"></div>
+
+<script src="js/components.js"></script>
+<script src="js/api.js"></script>
+<script src="js/products.js"></script>
+<script src="js/checkout.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => { renderNavbar(); renderFooter(); initCheckout(); });
+</script>
+</body>
+</html>
